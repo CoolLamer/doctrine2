@@ -108,13 +108,13 @@ class DefaultQueryCache implements QueryCache
         }
 
         $result      = array();
-        $entityName  = reset($rsm->aliasMap); //@TODO find root entity
+        $entityName  = reset($rsm->aliasMap);
         $hasRelation = ( ! empty($rsm->relationMap));
         $persister   = $this->uow->getEntityPersister($entityName);
         $region      = $persister->getCacheRegion();
         $regionName  = $region->getName();
 
-        // @TODO - move to cache hydration componente
+        // @TODO - move to cache hydration component
         foreach ($entry->result as $index => $entry) {
 
             if (($entityEntry = $region->get($entityKey = new EntityCacheKey($entityName, $entry['identifier']))) === null) {
@@ -210,12 +210,16 @@ class DefaultQueryCache implements QueryCache
             throw new CacheException("Second level cache does not suport scalar results.");
         }
 
+        if (count($rsm->entityMappings) > 1) {
+            throw new CacheException("Second level cache does not suport multiple root entities.");
+        }
+
         if ( ! ($key->cacheMode & Cache::MODE_PUT)) {
             return false;
         }
 
         $data        = array();
-        $entityName  = reset($rsm->aliasMap); //@TODO find root entity
+        $entityName  = reset($rsm->aliasMap);
         $hasRelation = ( ! empty($rsm->relationMap));
         $metadata    = $this->em->getClassMetadata($entityName);
         $persister   = $this->uow->getEntityPersister($entityName);
@@ -242,7 +246,7 @@ class DefaultQueryCache implements QueryCache
                 continue;
             }
 
-            // @TODO - move to cache hydration componente
+            // @TODO - move to cache hydration components
             foreach ($rsm->relationMap as $name) {
                 $assoc = $metadata->associationMappings[$name];
 

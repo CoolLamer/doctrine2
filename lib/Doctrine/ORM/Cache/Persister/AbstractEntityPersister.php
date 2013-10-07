@@ -179,7 +179,6 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
     public function exists($entity, array $extraConditions = array())
     {
         if (empty($extraConditions)) {
-
             $key = new EntityCacheKey($this->class->rootEntityName, $this->class->getIdentifierValues($entity));
 
             if ($this->region->contains($key)) {
@@ -317,7 +316,6 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
         $result     = $queryCache->get($querykey, $rsm);
 
         if ($result !== null) {
-
             if ($this->cacheLogger) {
                 $this->cacheLogger->queryCacheHit($this->regionName, $querykey);
             }
@@ -331,12 +329,14 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
 
         $cached = $queryCache->put($querykey, $rsm, array($result));
 
-        if ($this->cacheLogger && $result) {
-            $this->cacheLogger->queryCacheMiss($this->regionName, $querykey);
-        }
+        if ($this->cacheLogger) {
+            if ($result) {
+                $this->cacheLogger->queryCacheMiss($this->regionName, $querykey);
+            }
 
-        if ($this->cacheLogger && $cached) {
-            $this->cacheLogger->queryCachePut($this->regionName, $querykey);
+            if ($cached) {
+                $this->cacheLogger->queryCachePut($this->regionName, $querykey);
+            }
         }
 
         return $result;
@@ -356,7 +356,6 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
         $result     = $queryCache->get($querykey, $rsm);
 
         if ($result !== null) {
-
             if ($this->cacheLogger) {
                 $this->cacheLogger->queryCacheHit($this->regionName, $querykey);
             }
@@ -367,12 +366,14 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
         $result = $this->persister->loadAll($criteria, $orderBy, $limit, $offset);
         $cached = $queryCache->put($querykey, $rsm, $result);
 
-        if ($this->cacheLogger && $result) {
-            $this->cacheLogger->queryCacheMiss($this->regionName, $querykey);
-        }
+        if ($this->cacheLogger) {
+            if ($result) {
+                $this->cacheLogger->queryCacheMiss($this->regionName, $querykey);
+            }
 
-        if ($this->cacheLogger && $cached) {
-            $this->cacheLogger->queryCachePut($this->regionName, $querykey);
+            if ($cached) {
+                $this->cacheLogger->queryCachePut($this->regionName, $querykey);
+            }
         }
 
         return $result;
@@ -388,13 +389,11 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
         $class      = $this->class;
 
         if ($cacheEntry !== null) {
-
             if ($cacheEntry->class !== $this->class->name) {
                 $class = $this->metadataFactory->getMetadataFor($cacheEntry->class);
             }
 
             if (($entity = $this->hydrator->loadCacheEntry($class, $cacheKey, $cacheEntry, $entity)) !== null) {
-
                 if ($this->cacheLogger) {
                     $this->cacheLogger->entityCacheHit($this->regionName, $cacheKey);
                 }
@@ -419,11 +418,11 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
         $cacheEntry = $this->hydrator->buildCacheEntry($class, $cacheKey, $entity);
         $cached     = $this->region->put($cacheKey, $cacheEntry);
 
-        if ($this->cacheLogger && $cached) {
-            $this->cacheLogger->entityCachePut($this->regionName, $cacheKey);
-        }
-
         if ($this->cacheLogger) {
+            if ($cached) {
+                $this->cacheLogger->entityCachePut($this->regionName, $cacheKey);
+            }
+
             $this->cacheLogger->entityCacheMiss($this->regionName, $cacheKey);
         }
 
@@ -453,7 +452,6 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
             $list    = $persister->loadCollectionCache($coll, $key);
 
             if ($list !== null) {
-
                 if ($this->cacheLogger) {
                     $this->cacheLogger->collectionCacheHit($persister->getCacheRegion()->getName(), $key);
                 }
@@ -489,7 +487,6 @@ abstract class AbstractEntityPersister implements CachedEntityPersister
             $list    = $persister->loadCollectionCache($coll, $key);
 
             if ($list !== null) {
-
                 if ($this->cacheLogger) {
                     $this->cacheLogger->collectionCacheHit($persister->getCacheRegion()->getName(), $key);
                 }
