@@ -5,6 +5,10 @@ php:
   - 5.4
   - 5.5
 
+services:
+  - mysql
+  - postgres
+
 env:
   - ENABLE_SECOND_LEVEL_CACHE=1
   - ENABLE_SECOND_LEVEL_CACHE=0
