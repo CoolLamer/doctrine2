@@ -42,7 +42,11 @@ class CollectionCacheEntry implements CacheEntry
     }
 
     /**
-     * @param array $values
+     * Creates a new CollectionCacheEntry
+     *
+     * This method allow Doctrine\Common\Cache\PhpFileCache compatibility
+     *
+     * @param array $values array containing property values
      */
     public static function __set_state(array $values)
     {

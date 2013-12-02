@@ -71,7 +71,7 @@ A query region might be something like :
 Cache Regions
 -------------
 
-``Doctrine\ORM\Cache\Region\DefaultRegion`` Its the default implementation.
+``Doctrine\ORM\Cache\Region\DefaultRegion`` It's the default implementation.
  A simplest cache region compatible with all doctrine-cache drivers but does not support locking.
 
 ``Doctrine\ORM\Cache\Region`` and ``Doctrine\ORM\Cache\ConcurrentRegion``
@@ -218,7 +218,7 @@ Caching mode
 
 * ``NONSTRICT_READ_WRITE``
 
-  * Read Write Cache doesn’t employ any locks but can do reads, inserts , updates and deletes.
+  * Read Write Cache doesn’t employ any locks but can do reads, inserts, updates and deletes.
   * Good if the application needs to update data rarely.
     
 
